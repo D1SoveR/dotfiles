@@ -1,0 +1,13 @@
+[user]
+	email = d1sover@gmail.com
+	name = Mikołaj \"D1SoveR\" Banasik
+[color]
+	ui = auto
+[merge]
+	conflictstyle = diff3
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

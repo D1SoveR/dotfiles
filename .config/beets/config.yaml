@@ -1,0 +1,57 @@
+directory: ~/Music
+library: ~/.local/share/beets/library.db
+
+asciiify_paths: yes
+
+paths:
+  default: $albumartist/[$year] $album%aunique{}/$disc_and_track $title
+  albumtype:soundtrack: Soundtracks/$album%aunique{}/$disc_and_track $title
+  comp: Various Artists/$album%aunique{}/$disc_and_track $title
+  singleton: Singles/$artist/$title
+
+sort_item: album+ disc+ track+ artist+ title+
+sort_album: albumartist+ year+ album+
+sort_case_insensitive: yes
+
+format_album: "[$year] $albumartist - $album"
+
+per_disc_numbering: yes
+
+va_name: Various Artists
+
+import:
+  write: yes
+  copy: yes
+  move: no
+  timid: no
+  group_albums: no
+  log: ~/.cache/beets.log
+
+plugins: badfiles discogs info inline edit fetchart embedart lyrics web mpdupdate replaygain
+
+item_fields:
+  disc_and_track: u'%01i-%02i' % (disc, track) if disctotal > 1 else u'%02i' % (track)
+
+fetchart:
+  auto: yes
+  minwidth: 300
+  sources: filesystem coverart wikipedia google amazon albumart
+  google_key: AIzaSyAWiGxrLRj0E5MFsNm1nsxFw_f-Xm3FNgA
+
+embedart:
+  auto: yes
+  compare_threshold: 0
+  ifempty: yes
+  maxwidth: 600
+  remove_art_file: no
+
+lyrics:
+  sources: google lyricwiki musixmatch genius
+  google_API_key: AIzaSyAWiGxrLRj0E5MFsNm1nsxFw_f-Xm3FNgA
+
+mpd:
+  host: 127.0.0.1
+  port: 50012
+
+replaygain:
+  backend: gstreamer
