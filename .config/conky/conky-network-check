@@ -1,0 +1,116 @@
+#!/usr/bin/env node
+
+const { execSync } = require("child_process"),
+      http = require("http"),
+      https = require("https"),
+      { promisify } = require("util"),
+      { URL } = require("url");
+
+const run = async (command, options = {}) => execSync(command, Object.assign({}, options, { encoding: "utf-8" }));
+
+const request = (url, options = {}) => new Promise((resolve, reject) => {
+
+    let functionToRequest,
+        request;
+
+    if (typeof url === "string") {
+        url = new URL(url);
+    }
+
+    if (url) {
+        options = Object.assign(url, options);
+    }
+
+    functionToRequest = options.protocol === "https:" ? https.request.bind(https) : http.request.bind(http);
+    request = functionToRequest(options, response => {
+        let data = "";
+        response.setEncoding("utf-8");
+        response.on("data", chunk => data += chunk);
+        response.on("end", () => resolve(data));
+    });
+
+    request.on("error", reject);
+    request.end();
+});
+
+function getProp(path) {
+    return data => {
+        return path.split(".").reduce(function(obj, key) {
+            return (obj && obj.hasOwnProperty(key)) ? obj[key] : void 0;
+        }, JSON.parse(data));
+    };
+}
+
+function findMatch(regex) {
+    return regex.test.bind(regex);
+}
+
+const getInterfaces = async () => {
+
+    let interfaces = (await run("ip -o addr")).trim().split("\n"),
+        base,
+        vpn;
+
+    for (line of interfaces) {
+
+        let match;
+        if (!base && (match = line.match(/^\s*\d+:\s+((?:enp|wlp|bridge)\S+)/))) {
+            base = match[1];
+        }
+        if (!vpn && (match = line.match(/^\s*\d+:\s+((?:tun|tap|[Ww]ireguard|Mullvad)\S+)/))) {
+            vpn = match[1];
+        }
+
+        if (base && vpn) {
+            break;
+        }
+    }
+
+    return [base, vpn];
+};
+
+const checkVPN = () => new Promise((resolve, reject) => {
+
+    const vpn_checks = {
+        "AzireVPN": request("https://www.azirevpn.com/check").then(findMatch(/VPN\s+<span>\s*You are connected/)),
+        "hide.me":  request("https://hide.me/api/geoip").then(getProp("isConnected")),
+        "mullvad":  request("https://am.i.mullvad.net/json").then(getProp("mullvad_exit_ip"))
+    };
+
+    for (let [name, result] of Object.entries(vpn_checks)) {
+        vpn_checks[name] = result.then(connected => connected && resolve(name), () => {});
+    }
+
+    Promise.all(Object.values(vpn_checks)).then(() => resolve("NONE"));
+
+});
+
+(async function() {
+
+    let interfaces = await getInterfaces(),
+        ip = request("http://ipinfo.io/ip"),
+        vpn = interfaces[1] ? checkVPN() : "NONE";
+
+    if (!interfaces[0] && !interfaces[1]) {
+        console.log("${alignc}[ no network connectivity ]");
+    } else {
+
+        let output = `$\{color grey\}IP:   $\{color\}${(await ip).trim()}$\{goto 200\}$\{color grey\}VPN:  $\{color\}${await vpn}$\{voffset 6\}\n`,
+            measures = [];
+
+        for (direction of ["Up", "Down"]) {
+            for (interface of await interfaces) {
+                if (interface) {
+                    output += `$\{color grey\}${(direction + ":").padEnd(6)}$\{color\}$\{${direction.toLowerCase()}speed ${interface}\}`;
+                }
+
+                output += "${goto 200}";
+            }
+            output += "\n";
+        }
+
+        console.log(output.replace(/\n$/, ""));
+
+    }
+
+}());
