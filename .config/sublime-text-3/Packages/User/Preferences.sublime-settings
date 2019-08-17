@@ -1,0 +1,13 @@
+{
+	// Fancy font
+	"font_face": "Fira Code",
+	"font_size": 11,
+	"font_options": [
+		"gray_antialias"
+	],
+
+	"ignored_packages":
+	[
+		"Vintage"
+	]
+}
