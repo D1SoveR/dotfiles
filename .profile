@@ -81,16 +81,17 @@ export PROTON_DEBUG_DIR="$XDG_CACHE_HOME/steam"
 
 # === OTHER CUSTOMISATION ===
 
-# Defining preferred text editor; Sublime Text when working locally within X session,
-# nano otherwise (either remotely, or on non-X session)
+# Defining preferred software based on current environment; if we're in local X session,
+# use Sublime Text as editor and Firefox as browser; but if we're connecting remotely,
+# use nano and lynx respectively.
 if [[ -v DISPLAY ]] && [[ ! -v SSH_CLIENT ]] && [[ ! -v SSH_TTY ]]; then
 	export VISUAL="subl --wait"
+	export BROWSER="firefox"
 else
 	export VISUAL="nano"
+	export BROWSER="lynx"
 fi
 export EDITOR=$VISUAL
-
-# Git configuration
 export GIT_EDITOR=$EDITOR
 
 # Disabling history for less
