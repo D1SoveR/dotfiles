@@ -1,0 +1,11 @@
+nopurge 1
+
+output /home/Movies
+subdir 1
+subdirformat <nameshort>/<series>
+fileprefix <senum> <episodeshort>
+whitespace 1
+
+modes tvbest,radiobest
+subtitles 1
+subsmono 1
