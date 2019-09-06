@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+mkdir ~/temp &&
+whipper cd rip --cdr --unknown --output-directory ~/temp &&
+beet --verbose import -m ~/temp &&
+rm -r ~/temp
