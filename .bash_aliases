@@ -1,5 +1,10 @@
 # Collection of aliases for personal use and improved bash experience. :P
 
+# Convenient ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
 # === DOTFILES & SYSTEM CONFIGURATION ===
 # These two allow for easy tracking of changes to both user-specific and system-wide configuration,
 # with help of detached git repo directory; likely used to save this very file (the actual repos
