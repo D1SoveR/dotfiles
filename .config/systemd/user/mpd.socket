@@ -1,8 +1,0 @@
-[Socket]
-ListenStream=50012
-Backlog=5
-KeepAlive=true
-PassCredentials=true
-
-[Install]
-WantedBy=sockets.target
