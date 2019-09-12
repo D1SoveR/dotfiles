@@ -4,10 +4,11 @@
 # script starts alongside Dicsord and minimises its window if it appears within a minute.
 
 for i in {1..60}; do
-	WINDOW_ID=$(xdotool search --name " - Discord$")
-	if [ $WINDOW_ID ]; then
-		xdotool windowunmap $WINDOW_ID
-		break
-	fi
-	sleep 1
+	for WINDOW_ID in $(xdotool search --onlyvisible --class "discord"); do
+		if (xprop -id $WINDOW_ID | grep -Eq 'WM_WINDOW_ROLE.+browser-window'); then
+			xdotool windowunmap $WINDOW_ID
+			break 2
+		fi
+		sleep 1
+	done
 done
