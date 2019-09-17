@@ -1,0 +1,25 @@
+[Unit]
+Description=SSH key agent
+
+[Service]
+Type=simple
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.sock
+# This line prevents the agent from starting if another one is already started
+ExecCondition=/bin/bash -c '! ssh-add -ql &> /dev/null'
+ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
+
+# Service hardening
+ProtectSystem=strict
+PrivateTmp=true
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+SystemCallArchitectures=native
+MemoryDenyWriteExecute=true
+NoNewPrivileges=yes
+
+# Since ProtectHome would prevent the ssh-agent from creating its socket (makes run directory inaccessible),
+# we will instead explicitly block the /home and /root directories, but leave the /run/user directory writable
+InaccessiblePaths=/home /root
+
+[Install]
+WantedBy=default.target

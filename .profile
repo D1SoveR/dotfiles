@@ -81,6 +81,9 @@ export PROTON_DEBUG_DIR="$XDG_CACHE_HOME/steam"
 
 # === OTHER CUSTOMISATION ===
 
+# Setup to ensure that all the applications have address of the SSH key agent.
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.sock"
+
 # Defining preferred software based on current environment; if we're in local X session,
 # use Sublime Text as editor and Firefox as browser; but if we're connecting remotely,
 # use nano and lynx respectively.
