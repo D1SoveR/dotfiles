@@ -2,6 +2,15 @@
 # ~/.bashrc
 #
 
+# Loading NVM first, before we check if the shell is interactive, to make sure that
+# every environment that runs .profile still has the env variables for accessing node
+# setup; but we're not moving it to .profile, since we still want non-login shells
+# to have the nvm alias defined.
+
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# The rest of the .bashrc is only for interactive shells
 [[ $- != *i* ]] && return
 
 colors() {
@@ -159,9 +168,6 @@ if ! shopt -oq posix; then
   fi
 fi
 if [ $TILIX_ID ] || [ $VTE_VERSION ] ; then source /etc/profile.d/vte.sh; fi # Ubuntu Budgie END
-
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Adding git bash prompt, to list repo status when in terminal
 GIT_PROMPT_ONLY_IN_REPO=1
