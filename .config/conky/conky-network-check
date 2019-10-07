@@ -57,7 +57,7 @@ const getInterfaces = async () => {
         if (!base && (match = line.match(/^\s*\d+:\s+((?:enp|wlp|bridge)\S+)/))) {
             base = match[1];
         }
-        if (!vpn && (match = line.match(/^\s*\d+:\s+((?:tun|tap|[Ww]ireguard|Mullvad)\S+)/))) {
+        if (!vpn && (match = line.match(/^\s*\d+:\s+((?:tun|tap|[Ww]ireguard|[Mm]ullvad)\S+)/))) {
             vpn = match[1];
         }
 
