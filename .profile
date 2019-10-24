@@ -111,3 +111,12 @@ fi
 if [ -f "$HOME/.bashrc" ]; then
     . "$HOME/.bashrc"
 fi
+
+# === REMOTE SESSION ===
+# If logging in remotely via SSH, start our default remote session.
+# By having this option on by default, we won't be running into issues with accidentally
+# starting long-running commands that will need connection kept to see the output of
+# (it uses defaults provided by custom tmux wrapper to connect to the same session
+#  across different logins).
+
+[ ! -z "$SSH_TTY" ] && tmux

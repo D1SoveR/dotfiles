@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# This script wraps up the tmux command to use the configuration file saved in XDG-compliant location,
+# as well as providing some defaults for when it's executed without any arguments (providing better user
+# experience when working with tmux remotely).
+
+# First, we gain access to actual tmux binary, using which and excluding currently running script.
+# This is because this very script is likely to be the first one in $PATH, meaning that if we just
+# tried to run "tmux", we'd run into infinite loop.
+for item in `which -a tmux`; do
+	if [[ "$item" != "$0" ]]; then
+		TMUX_COMMAND="$item"
+		break
+	fi
+done
+if [ -z "$TMUX_COMMAND" ]; then
+	echo "Could not find actual tmux binary!" 1>&2
+	exit 1
+fi
+
+# This establishes directory for tmux config, and creates the relevant files if they
+# do not exist yet. It's in dedicated tmux directory so that if we've any snippets
+# specifically for tmux (like contents of status bar), they can be kept alongside
+# the main config file.
+TMUX_CONFIG_FILE="$XDG_CONFIG_HOME/tmux/config"
+[ ! -d "${TMUX_CONFIG_FILE%/config}" ] && mkdir -p "${TMUX_CONFIG_FILE%/config}"
+[ ! -f "$TMUX_CONFIG_FILE" ] && touch "$TMUX_CONFIG_FILE"
+
+# Provide default behaviour for when no actual arguments have been provided.
+# In such cases, we try to attach to existing named session, or if it doesn't exist,
+# create a new one. SSH has its own session, separate from local one (if we need to
+# access the local one from SSH, or vice versa, we can still do so by using
+# "attach-session" tmux command).
+if [ "${#}" -le "0" ]; then
+	if [ ! -z "$SSH_TTY" ]; then
+		TMUX_ARGS=("new-session" "-A" "-s" "Remote Session")
+	else
+		TMUX_ARGS=("new-session" "-A" "-s" "Local Session")
+	fi
+else
+	TMUX_ARGS=("${@}")
+fi
+
+# Finally, execute tmux either with provided arguments, or the default ones.
+exec "$TMUX_COMMAND" -f "$TMUX_CONFIG_FILE" "${TMUX_ARGS[@]}"
