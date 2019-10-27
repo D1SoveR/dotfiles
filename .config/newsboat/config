@@ -1,3 +1,3 @@
 ignore-article "https://forum.manjaro.org/c/announcements.rss" "title !~ \"^\\[Stable Update\\]\""
-ignore-article "https://www.archlinux.org/feeds/news/" "title !~ \"requires?( manual)? intervention$\""
+ignore-article "https://www.archlinux.org/feeds/news/" "title !~ \"(require(d|s)?|intervention)\""
 ignore-mode "download"
