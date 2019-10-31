@@ -9,8 +9,12 @@ setw -g automatic-rename on   # rename window to reflect current program
 set -g renumber-windows on    # renumber windows when a window is closed
 set -g set-titles on
 
-# Enable mouse mode (tmux 2.1 and above)
+# Enable mouse mode (tmux 2.1 and above), and provide toggle for when mouse
+# needs to be used by underlying applications (like line scrolling in nano)
 set -g mouse on
+unbind m
+unbind M
+bind m set mouse \; display "Mouse mode toggled"
 
 # Keybindings for splitting panes
 bind | split-window -h
@@ -23,6 +27,10 @@ bind -n M-Left select-pane -L
 bind -n M-Right select-pane -R
 bind -n M-Up select-pane -U
 bind -n M-Down select-pane -D
+
+# Clear entire history (current bash and scrollback buffer) with single shortcut
+# (really long bit of code to make sure that the clearing of Bash buffer with Ctrl+L happens before tmux clear-history)
+bind h wait-for -L screen-clear \; send-keys "C-l" \; run-shell -b "sleep 1 && tmux clear-history && tmux wait-for -U screen-clear" \; wait-for -L screen-clear \; wait-for -U screen-clear \; display "Screen cleared"
 
 set -g status-position top
 set -g status-justify centre
