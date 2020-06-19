@@ -48,6 +48,7 @@ mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME"
 # Configuring XDG-compliant paths to various configuration files
 export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android"
 export DVDCSS_CACHE="$XDG_CACHE_HOME/dvdcss/"
+export GETIPLAYERUSERPREFS="$XDG_CONFIG_HOME/get-iplayer"
 export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
 export HISTFILE="$XDG_CACHE_HOME/bash_history"
 export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"
@@ -69,15 +70,31 @@ export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/history_hook.py"
 # alternative ICD paths.
 # https://wiki.archlinux.org/index.php/Vulkan#Nvidia_-_vulkan_is_not_working_and_can_not_initialize
 export VK_ICD_FILENAMES="/usr/share/vulkan/icd.d/radeon_icd.x86_64.json"
-#export VK_ICD_FILENAMES="/etc/vulkan/icd.d/amd_icd64.json"
+#export VK_ICD_FILENAMES="/usr/share/vulkan/icd.d/amd_icd64.json"
 
 # This environment variable allows Gallium Nine games to delay swapping the buffer until
 # it finishes rendering, reducing micro-stuttering and screen tearing
 # https://www.phoronix.com/scan.php?page=news_item&px=Gallium-Nine-Thread-Submit
 export thread_submit=true
 
+# Default setup for DXVK HUD - shows base driver information (useful for verifying ACO vs LLVM),
+# FPS for measure, and frametimes graph to spot stuttering.
+export DXVK_HUD="devinfo,fps,frametimes"
+
+# Enable ACO shader compiler by default for better performance and less stuttering
+# (if anything has issues with ACO, run it with RADV_PERFTEST="llvm")
+export RADV_PERFTEST="aco"
+
+# Maximum amount of FPS allowed when using libstrangle over VSync
+# (some games hit massive performance issues when their VSync is enabled)
+export FPS=60
+
 # Proton debugging goes into directory under cache
 export PROTON_DEBUG_DIR="$XDG_CACHE_HOME/steam"
+
+# This forces the Steam client to unmap the window when close button is clicked
+# (default behaviour is to minimise it, keeping it in the windows bar).
+export STEAM_FRAME_FORCE_CLOSE=1
 
 # === OTHER CUSTOMISATION ===
 

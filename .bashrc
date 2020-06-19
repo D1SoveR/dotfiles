@@ -40,6 +40,8 @@ colors() {
 	done
 }
 
+[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+
 # Change the window title of X terminals
 case ${TERM} in
 	xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
@@ -145,8 +147,8 @@ ex ()
   fi
 }
 
-# better yaourt colors
-export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+# Allow for commands not to be written to history if prefixed with a space
+export HISTCONTROL=ignorespace
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -167,7 +169,11 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-if [ $TILIX_ID ] || [ $VTE_VERSION ] ; then source /etc/profile.d/vte.sh; fi # Ubuntu Budgie END
+
+# Load bash completion for kitty if it's being currently used
+if [ ! -z "$KITTY_WINDOW_ID" ]; then
+	source <(kitty + complete setup bash)
+fi
 
 # Adding git bash prompt, to list repo status when in terminal
 GIT_PROMPT_ONLY_IN_REPO=1

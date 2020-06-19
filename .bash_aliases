@@ -1,7 +1,7 @@
 # Collection of aliases for personal use and improved bash experience. :P
 
 # Convenient ls aliases
-alias ll='ls -alF'
+alias ll='ls -alhF'
 alias la='ls -A'
 alias l='ls -CF'
 
