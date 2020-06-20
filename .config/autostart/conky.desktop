@@ -1,9 +1,20 @@
 [Desktop Entry]
+Categories=System;Monitor;
+Comment[en_GB]=
+Comment=
+Exec=conky --daemonize --pause=1
+GenericName[en_GB]=
+GenericName=
+Icon=conky-logomark-violet
+MimeType=
+Name[en_GB]=conky
+Name=conky
+Path=
+StartupNotify=false
+Terminal=false
+TerminalOptions=
 Type=Application
-Exec=/usr/bin/conky
-Hidden=false
-NoDisplay=false
-Name[en_GB]=Conky
-Name=Conky
-Comment[en_GB]=Highly configurable system monitor
-Comment=Highly configurable system monitor
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
