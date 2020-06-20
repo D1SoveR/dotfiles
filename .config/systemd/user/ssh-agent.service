@@ -5,7 +5,7 @@ Description=SSH key agent
 Type=simple
 Environment=SSH_AUTH_SOCK=%t/ssh-agent.sock
 # This line prevents the agent from starting if another one is already started
-ExecCondition=/bin/bash -c '! ssh-add -ql &> /dev/null'
+ExecCondition=/bin/bash -c 'ssh-add -ql &> /dev/null; if [ $? -ne 2 ]; then exit 1; fi'
 ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
 
 # Service hardening
