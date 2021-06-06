@@ -27,7 +27,7 @@ import:
   group_albums: no
   log: ~/.cache/beets.log
 
-plugins: badfiles discogs info inline edit fetchart embedart lyrics web mpdupdate replaygain
+plugins: badfiles info inline edit fetchart embedart mpdupdate lyrics replaygain #discogs web
 
 item_fields:
   disc_and_track: u'%01i-%02i' % (disc, track) if disctotal > 1 else u'%02i' % (track)
