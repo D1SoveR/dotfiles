@@ -47,6 +47,7 @@ mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME"
 
 # Configuring XDG-compliant paths to various configuration files
 export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export DVDCSS_CACHE="$XDG_CACHE_HOME/dvdcss/"
 export GETIPLAYERUSERPREFS="$XDG_CONFIG_HOME/get-iplayer"
 export GNUPGHOME="$XDG_CONFIG_HOME/gnupg"
@@ -54,6 +55,7 @@ export HISTFILE="$XDG_CACHE_HOME/bash_history"
 export NODE_REPL_HISTORY="$XDG_CACHE_HOME/node_repl_history"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export NVM_DIR="$XDG_DATA_HOME/nvm"
+export SSB_HOME="$XDG_DATA_HOME/zoom"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
 
@@ -62,15 +64,6 @@ export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/history_hook.py"
 
 # === GAMING ===
 # Any settings related to gaming setup should be put in this section.
-
-# Vulkan setup:
-# With both mesa and amdvlk installed, one of the drivers should be set up as default
-# (otherwise the Vulkan layer selected at runtime is undefined). We go with mesa as
-# default Vulkan implementation, and should be able to use amdvlk by providing
-# alternative ICD paths.
-# https://wiki.archlinux.org/index.php/Vulkan#Nvidia_-_vulkan_is_not_working_and_can_not_initialize
-export VK_ICD_FILENAMES="/usr/share/vulkan/icd.d/radeon_icd.x86_64.json"
-#export VK_ICD_FILENAMES="/usr/share/vulkan/icd.d/amd_icd64.json"
 
 # This environment variable allows Gallium Nine games to delay swapping the buffer until
 # it finishes rendering, reducing micro-stuttering and screen tearing
@@ -81,14 +74,6 @@ export thread_submit=true
 # FPS for measure, and frametimes graph to spot stuttering.
 export DXVK_HUD="devinfo,fps,frametimes"
 
-# Enable ACO shader compiler by default for better performance and less stuttering
-# (if anything has issues with ACO, run it with RADV_PERFTEST="llvm")
-export RADV_PERFTEST="aco"
-
-# Maximum amount of FPS allowed when using libstrangle over VSync
-# (some games hit massive performance issues when their VSync is enabled)
-export FPS=60
-
 # Proton debugging goes into directory under cache
 export PROTON_DEBUG_DIR="$XDG_CACHE_HOME/steam"
 
@@ -98,8 +83,27 @@ export STEAM_FRAME_FORCE_CLOSE=1
 
 # === OTHER CUSTOMISATION ===
 
-# Setup to ensure that all the applications have address of the SSH key agent.
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.sock"
+# Set up the direction for notes application, used primarily for cool commands,
+# tech notes, and the like.
+export NOTES_DIRECTORY="$(xdg-user-dir DOCUMENTS)/Notes"
+mkdir -p "$NOTES_DIRECTORY"
+
+# This env var is used by Firefox along with some of its own internal settings
+# to enable hardware-accelerated video decoding. The config props in question:
+# * gfx.webrender.all                       -> true
+# * gfx.webrender.compositor                -> true
+# * media.ffvpx.enabled                     -> false
+# * media.ffvpx.mp3.enabled                 -> false
+# * media.ffmpeg.vaapi.enabled              -> true
+# * media.ffmpeg.vaapi-drm-display.enabled  -> true
+export MOZ_X11_EGL=1
+
+# Setup to ensure that all the applications have address of the SSH key agent
+# (but only if there's no previously set socket - it could be if SSH is run with
+#  agent forwarding).
+if [[ ! -v SSH_AUTH_SOCK ]]; then
+	export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.sock"
+fi
 
 # Defining preferred software based on current environment; if we're in local X session,
 # use Sublime Text as editor and Firefox as browser; but if we're connecting remotely,
@@ -121,7 +125,7 @@ export LESSHISTFILE=-
 # (this bit only installs it if it's not present to begin with; the code for
 # loading up all its aliases and bash completion is available in .bashrc)
 if [ ! -d "$NVM_DIR" ]; then
-	wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+	wget -qO- "https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh" | bash
 fi
 
 # Execute per-shell setup as well
