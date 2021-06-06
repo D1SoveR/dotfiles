@@ -35,7 +35,10 @@ bind h wait-for -L screen-clear \; send-keys "C-l" \; run-shell -b "sleep 1 && t
 set -g status-position top
 set -g status-justify centre
 
-set-option -g status-style bg=colour237,fg=colour252
+set -g status-left " [#S] "
+set -g status-right " \"#h\" %H:%M %d-%b-%y "
+
+set-option -g status-style bg="#292F34",fg=colour252
 set-window-option -g window-status-style bg=colour240,fg=colour247
 set-window-option -g window-status-current-style bg=colour251,fg=colour240,bold
 set-window-option -g window-status-format "#I #W"

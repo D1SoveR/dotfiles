@@ -1,3 +1,2 @@
 system:
-  sdl_video_fullscreen: '1'
-  terminal_app: /usr/bin/x-terminal-emulator
+  disable_compositor: true
