@@ -145,8 +145,8 @@ storage:
     # Remote network upload rate limit in kiBytes/second. Defaults to unlimited.
     # remote_rate_limit: 100
 
-    # Command to use instead of "ssh". This can be used to specify ssh options.
-    # Defaults to not set.
+    # Command to use instead of "ssh".
+    # Configured to use private key specific to BorgBase.
     ssh_command: ssh -i /home/d1sover/.config/borgmatic/borgbase-key
 
     # Base path used for various Borg directories. Defaults to $HOME, ~$USER, or ~.
@@ -201,7 +201,8 @@ storage:
         # create: --no-files-cache
 
         # Extra command-line options to pass to "borg check".
-        # check: --save-space
+        check: --save-space
+        # check: --debug
 
 # Retention policy for how many backups to keep in each category. See
 # https://borgbackup.readthedocs.org/en/stable/usage.html#borg-prune for details.
@@ -260,7 +261,7 @@ consistency:
         # - user@backupserver:sourcehostname.borg
 
     # Restrict the number of checked archives to the last n. Applies only to the "archives" check. Defaults to checking all archives.
-    # check_last: 3
+    check_last: 5
 
     # When performing the "archives" check, only consider archive names starting with
     # this prefix. Borg placeholders can be used. See the output of
@@ -314,7 +315,7 @@ hooks:
     # occurs during a "prune", "create", or "check" action or an associated
     # before/after hook.
     on_error:
-        - 'notify-send -u high -t 5 -i security-low -a "borgmatic" "Backup error" "Issue has been encountered when running daily backups."'
+        - 'notify-send -u critical -t 5 -i security-low -a "borgmatic" "Backup error" "Issue has been encountered when running daily backups."'
 
     # List of one or more PostgreSQL databases to dump before creating a backup,
     # run once per configuration file. The database dumps are added to your source

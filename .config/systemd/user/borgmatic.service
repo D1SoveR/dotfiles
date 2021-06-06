@@ -1,1 +1,33 @@
-/usr/lib/systemd/system/borgmatic.service
+[Unit]
+Description=borgmatic backup
+Wants=network-online.target
+After=network-online.target
+ConditionPathIsMountPoint=/mnt/backup
+
+[Service]
+Type=oneshot
+
+LockPersonality=true
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+SystemCallArchitectures=native
+
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=-/mnt/backup/borg
+
+# Lower CPU and I/O priority.
+Nice=10
+CPUSchedulingPolicy=batch
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+IOWeight=100
+
+Restart=no
+LogRateLimitIntervalSec=0
+
+ExecStart=systemd-inhibit --who="borgmatic" --why="Prevent interrupting scheduled backup" /usr/bin/borgmatic --syslog-verbosity 2
