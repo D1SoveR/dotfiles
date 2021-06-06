@@ -1,0 +1,74 @@
+{
+    "uuid:1184e931-349c-ca2b-35a2-33a39a06d22e": {
+        "name": "Living Room",
+        "flavour": "Chromecast",
+        "codecs": [
+            {
+                "rules": [],
+                "bit_rate": null,
+                "mime_type": "audio/mp3",
+                "identifier": "mp3"
+            },
+            {
+                "rules": [],
+                "mime_type": "audio/wav",
+                "identifier": "wav"
+            },
+            {
+                "rules": [],
+                "bit_rate": null,
+                "mime_type": "audio/aac",
+                "identifier": "aac"
+            },
+            {
+                "rules": [],
+                "mime_type": "audio/flac",
+                "identifier": "flac"
+            },
+            {
+                "rules": [],
+                "bit_rate": null,
+                "mime_type": "audio/ogg",
+                "identifier": "ogg"
+            }
+        ],
+        "rules": []
+    },
+    "uuid:RINCON_7828CA832DDC01400_MR": {
+        "name": "Bedroom",
+        "flavour": "DLNA",
+        "codecs": [
+            {
+                "rules": [
+                    {
+                        "name": "FAKE_HTTP_CONTENT_LENGTH"
+                    }
+                ],
+                "bit_rate": null,
+                "mime_type": "audio/mp3",
+                "identifier": "mp3"
+            },
+            {
+                "rules": [],
+                "mime_type": "audio/wav",
+                "identifier": "wav"
+            },
+            {
+                "rules": [],
+                "mime_type": "audio/flac",
+                "identifier": "flac"
+            },
+            {
+                "rules": [
+                    {
+                        "name": "FAKE_HTTP_CONTENT_LENGTH"
+                    }
+                ],
+                "bit_rate": null,
+                "mime_type": "application/ogg",
+                "identifier": "ogg"
+            }
+        ],
+        "rules": []
+    }
+}

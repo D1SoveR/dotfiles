@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CofD Dice Roller
+GenericName=Dice Roller
+Comment=Digital dice roller for Chronicles of Darkness tabletop RPGs
+Exec=_JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=gasp' java -jar '/home/d1sover/Documents/Tabletop RPGs/CofDDiceRoller.jar'
+Icon=roll
+Terminal=false
+Categories=Game;RolePlaying;Utility;
