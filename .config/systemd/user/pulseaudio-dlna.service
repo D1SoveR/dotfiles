@@ -1,0 +1,13 @@
+[Unit]
+Description=Exposes Chromecast and Sonos devices as PulseAudio sinks
+Requires=pulseaudio.service
+After=pulseaudio.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/pulseaudio-dlna
+TimeoutStartSec=5s
+TimeoutStopSec=10s
+
+[Install]
+WantedBy=pulseaudio.service
